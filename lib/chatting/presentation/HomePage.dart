@@ -1,9 +1,11 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:message_app/chatting/data/firebase_send_retrive_data.dart';
 import 'package:message_app/chatting/presentation/ReadChatPage.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -40,6 +42,7 @@ class  HomePageState extends State <HomePage> {
   SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.top,SystemUiOverlay.bottom]);
   super.dispose();
 }
+ 
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,14 +58,17 @@ class  HomePageState extends State <HomePage> {
 final _controller = TextEditingController();
 String text = "";
 
+
 clearTextInput(){
   _controller.clear();
 }
 
+GlobalKey<ScaffoldState> _scaffoldkey = GlobalKey<ScaffoldState>();
 
 Widget dashboard(context){
   return Scaffold(
-    backgroundColor: Colors.lightBlueAccent[200],
+    key: _scaffoldkey,
+    backgroundColor: Colors.orange[800],
     resizeToAvoidBottomPadding:false,
     resizeToAvoidBottomInset: true,
     body: SingleChildScrollView(
@@ -89,7 +95,7 @@ Widget dashboard(context){
                           margin: EdgeInsets.only(right:7,bottom:0,top: 10),
                           semanticContainer: true,
                           clipBehavior: Clip.antiAliasWithSaveLayer,
-                          child: Image.network("https://mir-s3-cdn-cf.behance.net/project_modules/disp/9c7a2773609829.5c0f6e269e920.gif",fit: BoxFit.cover,),
+                          child: Image.asset("assets/send.gif",fit: BoxFit.cover,),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(40)
                             ),
@@ -100,11 +106,11 @@ Widget dashboard(context){
                  Positioned(
                    bottom:30,
                    left: 10,
-                   width: 270,
+                   width: 275,
                    height: 60,
                         child: TextField(
                           
-                          scrollPadding: EdgeInsets.only(),
+                      scrollPadding: EdgeInsets.only(),
                        decoration: InputDecoration(
                          fillColor: Colors.black,
                          filled: true,
@@ -114,11 +120,11 @@ Widget dashboard(context){
                              fontFamily: "Montserrat"
                          ),
                          enabledBorder: OutlineInputBorder(
-                             borderSide:  BorderSide(color:Colors.lightBlueAccent[400],width: 3.0),
+                             borderSide:  BorderSide(color:Colors.cyan[700],width: 3.0),
                              borderRadius: BorderRadius.circular(50.0)
                          ),
                          focusedBorder: OutlineInputBorder(
-                             borderSide: BorderSide(color: Colors.lightBlueAccent[400],width: 3.0),
+                             borderSide: BorderSide(color: Colors.cyan[700],width: 3.0),
                              borderRadius: BorderRadius.circular(50.0)
                          ),
                        ),
@@ -135,7 +141,7 @@ Widget dashboard(context){
                       
                      ),
                  ),
-              
+                 
                  Positioned(
                    width: 45,
                    height: 45,
@@ -150,14 +156,104 @@ Widget dashboard(context){
                      shape: RoundedRectangleBorder(
 
                           borderRadius: BorderRadius.all(Radius.circular(50)),
+                      side: BorderSide(
+                          color:Colors.deepOrange,width:2
+                      )
                       ),
                       
-                    color: Colors.lightBlueAccent[400],
+                    color: Colors.cyan[900],
                      splashColor: Colors.black54,
                      onPressed: () async {
                        text = _controller.text;
                        await Firebase.initializeApp();
-                       sendMessage(text);
+                       
+                       if(text!=""){
+                         sendMessage(text);
+                         _scaffoldkey.currentState.showSnackBar(
+                               SnackBar(
+                                 elevation: 0,
+                                 content: Row(
+                                 children: [
+                               Container(
+                                 height: 15,
+                                 width: 15,
+                                 child: CircularProgressIndicator(
+                                   valueColor: AlwaysStoppedAnimation<Color>(Colors.lightGreenAccent[400]),
+                                   strokeWidth: 1,
+                                 )
+                                 ),
+                                 SizedBox(
+                                   width:50,
+                                 ),
+                               TypewriterAnimatedTextKit(
+                                  text:["Sending message . . . . . . . . . . . ."],
+                                  textAlign: TextAlign.center,
+                                  speed: Duration(
+                                    milliseconds: 30
+                                  ),
+                                  repeatForever: false,
+                                  textStyle: TextStyle(
+                                    color: Colors.white60,
+                                    fontWeight: FontWeight.w900,
+                                    fontFamily: "Montserrat",
+                                    fontSize: 15
+                                  ),
+                                ),
+                               Icon(
+                                 Icons.send,
+                                 color: Colors.orangeAccent[400],
+                               )
+                             ],
+                           ),
+                           duration: Duration(seconds:1),
+                           backgroundColor: Colors.black,
+                           behavior: SnackBarBehavior.floating,
+                           shape: RoundedRectangleBorder(
+                             borderRadius:BorderRadius.circular(50),
+                             side: BorderSide(
+                               color:Colors.cyan[900],width:5
+                             )
+                           ),
+                           ));
+                       }else{              
+                         _scaffoldkey.currentState.showSnackBar(
+                               SnackBar(
+                           content: Row(
+                             children: [
+                               SizedBox(
+                                 width:17
+                               ),
+                               Icon(
+                                 Icons.error_outline,
+                                 color: Colors.red,
+                               ),
+                               SizedBox(
+                                 width:17
+                               ),
+                               Text(
+                             "Empty message can't be send",
+                             style: TextStyle(
+                                   color: Colors.white70,
+                                   
+                                   fontFamily: "Montserrat",
+                                   fontSize: 18
+                                 ),
+                           ),
+                             ],
+                           ),
+                           elevation: 0,
+                           duration: Duration(seconds: 1),
+                           backgroundColor: Colors.black,
+                           behavior: SnackBarBehavior.floating,
+                           shape: RoundedRectangleBorder(
+                             borderRadius:BorderRadius.circular(50),
+                             side: BorderSide(
+                               color:Colors.cyan[900],width:5
+                             )
+                           ),
+                           ));
+                       }
+                       
                        clearTextInput();
                      }
                      ),
@@ -187,7 +283,7 @@ Widget dashboard(context){
                         height: 680,
                         child: InkWell(
                           onTap: () async {
-                            print("$text");
+                            
                             await Firebase.initializeApp();
                             Navigator.push(context,
                                     MaterialPageRoute(builder: (context)=>ReadChatPage()),
@@ -199,7 +295,7 @@ Widget dashboard(context){
                             semanticContainer: true,
                             clipBehavior: Clip.antiAliasWithSaveLayer,
                             child: Hero(tag: 'dash',
-                              child: Image.network("https://i.pinimg.com/originals/9d/23/6d/9d236dc22e9f8e83235b170b51f0080c.gif",fit: BoxFit.cover,)),
+                              child: Image.asset("assets/read.gif",fit: BoxFit.cover,)),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(40)
                               ),
@@ -207,7 +303,6 @@ Widget dashboard(context){
                           ),
                         ),
                       ),
-                      
                 
                  Positioned(
                    top: 50,
@@ -226,44 +321,7 @@ Widget dashboard(context){
                               ),
                             ),
                  ),
-                 Positioned(
-                   top: 150,
-                   left: 20,
-                            child: Column(
-                              children: [
-                                Text(
-                                  "Textfield text Output  :",
-                                  style: TextStyle(
-                                      color: Colors.orange[700],
-                                      fontWeight: FontWeight.w500,
-                                      fontFamily:"Montserrat"
-                                      ),
-                                ),
-                                Container(
-                                  width: 315,
-                                  child: Card(
-                                    elevation: 0,
-                                    color: Colors.black45,
-                                     //margin: EdgeInsets.only(left:20,bottom:0,top: 10),
-                                    shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12)
-                                  ),
-                                   child: Padding(
-                                     padding: EdgeInsets.symmetric(horizontal:29.0,vertical:10),
-                                     child: Text(text,
-                                      style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.w500,
-                                      fontFamily:"Montserrat"
-                                      ),
-                           ),
-                                   ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                 ),
+                 
                  Positioned(
                    bottom: 30,
                    left: 16,
