@@ -1,4 +1,7 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:message_app/chatting/data/firebase_send_retrive_data.dart';
+import 'package:message_app/chatting/presentation/ReadChatPage.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -15,7 +18,6 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-//https://www.jwtully.com/wp-content/uploads/2019/08/message_sent.gif
 
 class HomePage extends StatefulWidget {
   final SizingInformation sizingInformation;
@@ -116,13 +118,6 @@ Widget dashboard(context){
                        keyboardType: TextInputType.text,
                       
                        controller: _controller,
-                       /*controller: emailController,
-                       validator: (value){
-                         if (value.isEmpty) {
-                           return "Email cannot be empty";
-                         }
-                         return null;
-                       },*/
                       
                      ),
                  ),
@@ -145,8 +140,10 @@ Widget dashboard(context){
                       
                     color: Colors.lightGreenAccent[400],
                      splashColor: Colors.black54,
-                     onPressed: (){
+                     onPressed: () async {
                        text = _controller.text;
+                       await Firebase.initializeApp();
+                       sendMessage(text);
                        clearTextInput();
                      }
                      ),
@@ -172,6 +169,10 @@ Widget dashboard(context){
                         child: InkWell(
                           onTap: () async {
                             print("$text");
+                            await Firebase.initializeApp();
+                            Navigator.push(context,
+                                    MaterialPageRoute(builder: (context)=>ReadChatPage()),
+                                  );
                           },
                           splashColor: Colors.black12,
                             child: Card(

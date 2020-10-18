@@ -19,8 +19,9 @@ dependencies:
   flutter_bloc: any #Bloc for state management
   equatable: any #value equality
   dartz: any #functional programming things
+  firebase_core: any
   cloud_firestore: any #database
-  
+  provider_architecture: any
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.3

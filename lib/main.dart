@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'chatting/presentation/HomePage.dart';
 
-void main() {
+void main(){
   runApp(MyApp());
 }
 
