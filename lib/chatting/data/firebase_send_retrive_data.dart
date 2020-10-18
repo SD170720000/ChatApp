@@ -10,5 +10,5 @@ Future<void> sendMessage(String text) async {
 }
 
 retriveMessage(){
- return FirebaseFirestore.instance.collection('data').orderBy('time').snapshots();
+ return FirebaseFirestore.instance.collection('data').orderBy('time',descending: true).snapshots();
 }

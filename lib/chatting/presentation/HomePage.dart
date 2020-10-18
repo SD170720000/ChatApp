@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:message_app/chatting/data/firebase_send_retrive_data.dart';
 import 'package:message_app/chatting/presentation/ReadChatPage.dart';
 import 'package:responsive_builder/responsive_builder.dart';
@@ -28,7 +29,17 @@ class HomePage extends StatefulWidget {
 
 class  HomePageState extends State <HomePage> {
  
+  @override
+  void initState(){
+  SystemChrome.setEnabledSystemUIOverlays([]);
+  super.initState();
+  }
 
+  @override
+  void dispose(){
+  SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.top,SystemUiOverlay.bottom]);
+  super.dispose();
+}
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,20 +59,23 @@ clearTextInput(){
   _controller.clear();
 }
 
+
 Widget dashboard(context){
   return Scaffold(
-
+    backgroundColor: Colors.lightBlueAccent[200],
     resizeToAvoidBottomPadding:false,
     resizeToAvoidBottomInset: true,
     body: SingleChildScrollView(
 
       child: Column(
         children: <Widget>[
-          SizedBox(height: 40),
+          SizedBox(
+            height: 50,
+          ),
           Padding(
             padding: const EdgeInsets.all(0),
             child: Container(
-              height: 730,
+              height: 700,
               child: PageView(
                 controller: PageController(viewportFraction: 0.89),
                 scrollDirection: Axis.horizontal,
@@ -70,7 +84,7 @@ Widget dashboard(context){
                   Stack(
                     children: [
                       Container(
-                        height: 710,
+                        height: 680,
                         child: Card(
                           margin: EdgeInsets.only(right:7,bottom:0,top: 10),
                           semanticContainer: true,
@@ -100,11 +114,11 @@ Widget dashboard(context){
                              fontFamily: "Montserrat"
                          ),
                          enabledBorder: OutlineInputBorder(
-                             borderSide:  BorderSide(color:Colors.lightGreenAccent[400],width: 3.0),
+                             borderSide:  BorderSide(color:Colors.lightBlueAccent[400],width: 3.0),
                              borderRadius: BorderRadius.circular(50.0)
                          ),
                          focusedBorder: OutlineInputBorder(
-                             borderSide: BorderSide(color: Colors.green,width: 3.0),
+                             borderSide: BorderSide(color: Colors.lightBlueAccent[400],width: 3.0),
                              borderRadius: BorderRadius.circular(50.0)
                          ),
                        ),
@@ -116,7 +130,7 @@ Widget dashboard(context){
                        ),
                        autocorrect: true,
                        keyboardType: TextInputType.text,
-                      
+                       autofocus: false,
                        controller: _controller,
                       
                      ),
@@ -138,7 +152,7 @@ Widget dashboard(context){
                           borderRadius: BorderRadius.all(Radius.circular(50)),
                       ),
                       
-                    color: Colors.lightGreenAccent[400],
+                    color: Colors.lightBlueAccent[400],
                      splashColor: Colors.black54,
                      onPressed: () async {
                        text = _controller.text;
@@ -150,22 +164,27 @@ Widget dashboard(context){
                  ),
                  Positioned(
                    top: 50,
-                   left: 45,
-                            child: Text("Send Message ",
-                            style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 40,
-                            fontWeight: FontWeight.w500,
-                            fontFamily:"Pacifico"
-                            ),
+                   left: 10,
+                            child: Container(
+                              width: 325,
+                              child: Center(
+                                child: Text("Send Message ",
+                                style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 40,
+                                fontWeight: FontWeight.w500,
+                                fontFamily:"Pacifico"
+                                ),
                            ),
+                              ),
+                            ),
                  ),
                     ],
                   ),
                   Stack(
                     children: [
                       Container(
-                        height: 710,
+                        height: 680,
                         child: InkWell(
                           onTap: () async {
                             print("$text");
@@ -179,7 +198,8 @@ Widget dashboard(context){
                             margin: EdgeInsets.only(left:7,bottom:0,top: 10),
                             semanticContainer: true,
                             clipBehavior: Clip.antiAliasWithSaveLayer,
-                            child: Image.network("https://i.pinimg.com/originals/9d/23/6d/9d236dc22e9f8e83235b170b51f0080c.gif",fit: BoxFit.cover,),
+                            child: Hero(tag: 'dash',
+                              child: Image.network("https://i.pinimg.com/originals/9d/23/6d/9d236dc22e9f8e83235b170b51f0080c.gif",fit: BoxFit.cover,)),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(40)
                               ),
@@ -191,15 +211,20 @@ Widget dashboard(context){
                 
                  Positioned(
                    top: 50,
-                   left: 50,
-                            child: Text("Read Message ",
-                            style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 40,
-                            fontWeight: FontWeight.w500,
-                            fontFamily:"Pacifico"
-                            ),
+                   left: 11,
+                            child: Container(
+                              width: 335,
+                              child: Center(
+                                child: Text("Read Message ",
+                                style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 40,
+                                fontWeight: FontWeight.w500,
+                                fontFamily:"Pacifico"
+                                ),
                            ),
+                              ),
+                            ),
                  ),
                  Positioned(
                    top: 150,
@@ -242,6 +267,7 @@ Widget dashboard(context){
                  Positioned(
                    bottom: 30,
                    left: 16,
+
                             child: Card(
                               elevation: 0,
                               color: Colors.black45,
@@ -251,15 +277,18 @@ Widget dashboard(context){
                             ),
                              child: Padding(
                                padding: const EdgeInsets.symmetric(horizontal:40.0),
-                               child: Center(
-                                 child: Text("Click Card to Retrive",
-                                  style: TextStyle(
-                                  color: Colors.orange[700],
-                                  fontSize: 26,
-                                  fontWeight: FontWeight.w500,
-                                  fontFamily:"Pacifico"
-                                  ),
+                               child: Container(
+                                 width: 240,
+                                 child: Center(
+                                   child: Text("Click Card to Retrive",
+                                    style: TextStyle(
+                                    color: Colors.orange[700],
+                                    fontSize: 26,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily:"Pacifico"
+                                    ),
                            ),
+                                 ),
                                ),
                              ),
                             ),
