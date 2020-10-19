@@ -13,8 +13,8 @@ A few resources to get you started if this is your first Flutter project:
 
 <div style="display:flex">
 <img src="assets/chatApp1.gif" width="130" height="260">
-<img src="assets/chatApp2.1.jpg" width="130" height="260">
 <img src="assets/chatApp2.2.jpg" width="130" height="260">
+<img src="assets/chatApp2.1.jpg" width="130" height="260">
 <img src="assets/chatApp3.gif" width="130" height="260">
 <div>
   
